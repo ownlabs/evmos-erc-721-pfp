@@ -3,7 +3,7 @@
     <b-navbar>
       <template #brand>
         <b-navbar-item tag="router-link" :to="{ path: '/' }">
-          <b>Evmos - Proof of Existence</b>
+          <b>Evmos - PFP</b>
         </b-navbar-item>
       </template>
 
