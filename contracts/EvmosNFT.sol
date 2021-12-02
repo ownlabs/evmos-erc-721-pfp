@@ -15,8 +15,10 @@ contract EvmosNFT is ERC721, Ownable {
     string public contract_ipfs_json;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
+    uint256 HARD_CAP = 10001;
     bool public is_collection_revealed = false;
-    string public contract_base_uri = "https://raw.githubusercontent.com/ownlabs/evmos-erc-721/master/metadata/nft.json";
+    string public notrevealed_nft = "https://raw.githubusercontent.com/ownlabs/evmos-erc-721-pfp/master/metadata/nft.json";
+    string public contract_base_uri = "https://raw.githubusercontent.com/ownlabs/evmos-erc-721-pfp/master/metadata/";
     uint256 public mint_price = 0.0001 ether;
     constructor(
         address _marketplaceProxyAddress,
@@ -36,17 +38,48 @@ contract EvmosNFT is ERC721, Ownable {
         return _tokenIdCounter.current();
     }
 
+    function tokensOfOwner(address _owner) external view returns(uint256[] memory ownerTokens) {
+        uint256 tokenCount = balanceOf(_owner);
+        if (tokenCount == 0) {
+            // Return an empty array
+            return new uint256[](0);
+        } else {
+            uint256[] memory result = new uint256[](tokenCount);
+            uint256 totalTkns = totalSupply();
+            uint256 resultIndex = 0;
+            uint256 tnkId;
+
+            for (tnkId = 1; tnkId <= totalTkns; tnkId++) {
+                if (ownerOf(tnkId) == _owner) {
+                    result[resultIndex] = tnkId;
+                    resultIndex++;
+                }
+            }
+
+            return result;
+        }
+    }
+
     function tokenURI(uint256 _tokenId)
         public
         view
         override(ERC721)
         returns (string memory)
     {
-        if(_tokenId > 0){
-            return contract_base_uri;
-        }else{
-            return string(abi.encodePacked(""));
+        if(is_collection_revealed == true){
+            string memory _tknId = Strings.toString(_tokenId);
+            return string(abi.encodePacked(contract_base_uri, _tknId, ".json"));
+        } else {
+            return notrevealed_nft;
         }
+    }
+
+    /*
+        This method will allow owner reveal the collection
+     */
+
+    function revealCollection() public onlyOwner {
+        is_collection_revealed = true;
     }
 
     function contractURI() public view returns (string memory) {
@@ -71,6 +104,8 @@ contract EvmosNFT is ERC721, Ownable {
         require(msg.value % mint_price == 0, 'EvmosNFT, Amount must be a multiple of price');
         uint256 amount = msg.value / mint_price;
         require(amount >= 1, 'EvmosNFT: Amount should be at least 1');
+        uint256 reached = _tokenIdCounter.current() + 1;
+        require(reached <= HARD_CAP, "EvmosNFT: Hard cap reached");
         uint j = 0;
         for (j = 0; j < amount; j++) {
             _tokenIdCounter.increment();

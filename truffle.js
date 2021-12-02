@@ -5,10 +5,10 @@ module.exports = {
     contracts_directory: "./contracts/",
     plugins: [
         'truffle-plugin-verify'
-      ],
-      api_keys: {
+    ],
+    api_keys: {
         etherscan: process.env.ETHERSCAN_KEY
-      },
+    },
     networks: {
         ganache: {
             host: "localhost",
@@ -17,22 +17,14 @@ module.exports = {
             gasPrice: 15000000000,
             network_id: "*", // Match any network id
         },
-        rinkeby: {
+        evmos: {
             provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.PROVIDER),
-            network_id: 4,
+            network_id: 9000,
             confirmations: 2,
-            gasPrice: "100000000000",
+            gasPrice: "30",
             timeoutBlocks: 200,
             skipDryRun: true
         },
-        ethereum: {
-            provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.PROVIDER),
-            network_id: 1,
-            confirmations: 2,
-            timeoutBlocks: 200,
-            gasPrice: "100000000000",
-            skipDryRun: true
-        }
     },
     mocha: {
         reporter: "eth-gas-reporter",

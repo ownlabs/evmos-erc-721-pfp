@@ -23,12 +23,14 @@ async function main(minter) {
             console.log('Total supply is: ' + totalSupply)
             let toMint = 100 - parseInt(totalSupply)
             console.log('Need to mint ' + toMint + ' NFTs')
+            const gasPrice = await web3Instance.eth.getGasPrice()
+            console.log('Gas price is:', gasPrice)
             try {
                 const nonce = await web3Instance.eth.getTransactionCount(configs.owner_address)
                 console.log('Trying minting NFT with nonce ' + nonce + '...')
                 const result = await nftContract.methods
                     .buyNFT()
-                    .send({ from: minter, nonce: nonce, value: web3Instance.utils.toWei("0.0001", "ether"), gasPrice: "100000000000" }).on('transactionHash', pending => {
+                    .send({ from: minter, nonce: nonce, value: web3Instance.utils.toWei("0.0001", "ether"), gasPrice: gasPrice }).on('transactionHash', pending => {
                         console.log('Pending transaction at ' + pending)
                     });
                 console.log("NFT minted! Transaction: " + result.transactionHash);

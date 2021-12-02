@@ -1,10 +1,5 @@
 {
-    "description": "Evmos NFT Marketplace example NFT",
-    "external_url": "https://github.com/ownlabs/evmos-erc-721",
-    "name": "Evmos NFT",
-    "attributes": [{
-        "display_type": "boost_percentage",
-        "trait_type": "Useless Increase",
-        "value": 666
-    }]
+    "description": "Evmos Hidden NFT",
+    "external_url": "https://github.com/ownlabs/evmos-erc-721-pfp",
+    "name": "Evmos Hidden NFT"
 }
