@@ -5,6 +5,7 @@ node_modules/
 .nvmrc
 eth/deploy.sh
 yarn-error.log
-configs/
+configs/*
+!configs/example.json
 .DS_Store
 abi.json
