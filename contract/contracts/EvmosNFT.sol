@@ -123,10 +123,10 @@ contract EvmosNFT is ERC721, Ownable {
     }
 
     /*
-        This method will allow owner tow withdraw all ethers
+        This method will allow owner tow withdraw all funds
      */
 
-    function withdrawMatic() public onlyOwner {
+    function withdraw() public onlyOwner {
         uint256 balance = address(this).balance;
         require(balance > 0, 'EvmosNFT: Nothing to withdraw!');
         payable(msg.sender).transfer(balance);
